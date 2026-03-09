@@ -66,8 +66,7 @@
         # Create security group
         New-ADGroup -Name $SecurityGroup -GroupScope Global -Path $OUName -Server $ADServer
         # Create user
-        $SecuredPassword = ConvertTo-SecureString -String $(./op item get "$ClientCode Service Account" --fields password) -AsPlainText -Force
-        New-ADUser -Name $User -SamAccountName "$ClientCode" -UserPrincipalName $UPNUser -AccountPassword $SecuredPassword -Path $OUName -Server $ADServer -Enabled $true
+        New-ADUser -Name $User -SamAccountName "$ClientCode" -UserPrincipalName $UPNUser -AccountPassword (ConvertTo-SecureString -String $(./op item get "$ClientCode Service Account" --fields password) -Force) -Path $OUName -Server $ADServer -Enabled $true
         Add-ADGroupMember -Identity $SecurityGroup -Members $User -Server $ADServer
     }
     
